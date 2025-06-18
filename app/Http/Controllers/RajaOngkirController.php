@@ -12,8 +12,10 @@ class RajaOngkirController extends Controller
         $response = Http::withHeaders([
             'key' => env('RAJAONGKIR_API_KEY')
         ])->get(env('RAJAONGKIR_BASE_URL') . '/province');
+
         return response()->json($response->json());
     }
+
     public function getCities(Request $request)
     {
         $provinceId = $request->input('province_id');
@@ -22,14 +24,17 @@ class RajaOngkirController extends Controller
         ])->get(env('RAJAONGKIR_BASE_URL') . '/city', [
             'province' => $provinceId
         ]);
+
         return response()->json($response->json());
     }
+
     public function getCost(Request $request)
     {
         $origin = $request->input('origin');
         $destination = $request->input('destination');
         $weight = $request->input('weight');
         $courier = $request->input('courier');
+
         $response = Http::withHeaders([
             'key' => env('RAJAONGKIR_API_KEY')
         ])->post(env('RAJAONGKIR_BASE_URL') . '/cost', [
@@ -38,6 +43,7 @@ class RajaOngkirController extends Controller
             'weight' => $weight,
             'courier' => $courier,
         ]);
+
         return response()->json($response->json());
     }
 }

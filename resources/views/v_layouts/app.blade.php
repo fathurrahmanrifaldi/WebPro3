@@ -3,31 +3,40 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must
-come *after* these tags -->
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('image/icon_univ_bsi.png') }}">
     <title>tokoonline</title>
+
     <!-- Google font -->
     <link href="https://fonts.googleapis.com/css?family=Hind:400,700" rel="stylesheet">
+
     <!-- Bootstrap -->
     <link type="text/css" rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
+
     <!-- Slick -->
     <link type="text/css" rel="stylesheet" href="{{ asset('frontend/css/slick.css') }}">
     <link type="text/css" rel="stylesheet" href="{{ asset('frontend/css/slick-theme.css') }}">
+
     <!-- nouislider -->
     <link type="text/css" rel="stylesheet" href="{{ asset('frontend/css/nouislider.min.css') }}">
+
     <!-- Font Awesome Icon -->
     <link rel="stylesheet" href="{{ asset('frontend/css/font-awesome.min.css') }}">
+
     <!-- Custom stlylesheet -->
     <link type="text/css" rel="stylesheet" href="{{ asset('frontend/css/style.css') }}">
+
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
 </head>
 
 <body>
@@ -42,6 +51,7 @@ come *after* these tags -->
             </div>
         </div>
         <!-- /top Header -->
+
         <!-- header -->
         <div id="header">
             <div class="container">
@@ -53,7 +63,9 @@ come *after* these tags -->
                         </a>
                     </div>
                     <!-- /Logo -->
+
                     <!-- Search -->
+
                     <!-- /Search -->
                 </div>
                 <div class="pull-right">
@@ -68,8 +80,9 @@ come *after* these tags -->
                             </a>
                         </li>
                         <!-- /Cart -->
-                        @if (Auth::check())
+
                         <!-- Account -->
+                        @if (Auth::check())
                         <li class="header-account dropdown default-dropdown">
                             <div class="dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="true">
                                 <div class="header-btns-icon">
@@ -79,16 +92,14 @@ come *after* these tags -->
                                         class="fa fa-caret-down"></i></strong>
                             </div>
                             <ul class="custom-menu">
-                                <li><a href="{{ route('customer.akun', ['id' => Auth::user()->id]) }}"><i class="fa fauser-o"></i> Akun Saya</a>
-                                </li>
+                                <li><a href="{{ route('customer.akun', ['id' => Auth::user()->id]) }}"><i class="fa fa-user-o"></i> Akun Saya</a></li>
                                 <li><a href="#"><i class="fa fa-check"></i> History</a></li>
                                 <li>
-                                    <a href="javascript:void(0);"
-                                        onclick="submitLogout()"><i class="fa fa-power-off"></i> Keluar
+                                    <a href="#"
+                                        onclick="event.preventDefault(); document.getElementById('keluar-app').submit();"><i class="fa fa-power-off"></i> Keluar
                                     </a>
                                     <!-- form keluar app -->
-                                    <form id="keluar-form" action="{{ route('logout') }}" method="POST"
-                                        style="display: none;">
+                                    <form id="keluar-app" action="{{ route('logout' ) }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
                                     <!-- form keluar app end -->
@@ -105,8 +116,9 @@ come *after* these tags -->
                             </div>
                             <a href="{{ route('auth.redirect') }}" class="text-uppercase">Login</a>
                         </li>
-                        <!-- /Account -->
                         @endif
+                        <!-- /Account -->
+
 
                         <!-- Mobile nav toggle-->
                         <li class="nav-toggle">
@@ -121,11 +133,15 @@ come *after* these tags -->
         <!-- container -->
     </header>
     <!-- /HEADER -->
+
     <!-- NAVIGATION -->
     <div id="navigation">
         <!-- container -->
         <div class="container">
             <div id="responsive-nav">
+                @php
+                $kategori = DB::table('kategori')->orderBy('nama_kategori', 'asc')->get();
+                @endphp
                 @if (request()->segment(1) == '' || request()->segment(1) == 'beranda')
                 <!-- category nav -->
                 <div class="category-nav">
@@ -135,6 +151,8 @@ come *after* these tags -->
                         <li><a href="{{ route('produk.kategori', $row->id) }}">{{ $row->nama_kategori }}</a></li>
                         @endforeach
                     </ul>
+
+                    <ul class="category-list">
                 </div>
                 @else
                 <div class="category-nav show-on-click">
@@ -147,6 +165,7 @@ come *after* these tags -->
                 </div>
                 <!-- /category nav -->
                 @endif
+
                 <!-- menu nav -->
                 <div class="menu-nav">
                     <span class="menu-header">Menu <i class="fa fa-bars"></i></span>
@@ -158,13 +177,15 @@ come *after* these tags -->
                     </ul>
                 </div>
                 <!-- menu nav -->
+
+
             </div>
         </div>
         <!-- /container -->
     </div>
     <!-- /NAVIGATION -->
+
     @if (request()->segment(1) == '' || request()->segment(1) == 'beranda')
-    <!-- HOME -->
     <div id="home">
         <!-- container -->
         <div class="container">
@@ -177,11 +198,12 @@ come *after* these tags -->
                         <img src="{{ asset('frontend/banner/banner01.jpg') }}" alt="">
                         <div class="banner-caption text-center">
                             <h1>Jajanan Tradisional</h1>
-                            <h3 class="font-weak" style="color: #30323a;">Khas Makanan Indonesia</h3>
+                            <h3 class="font-weak" style="color: 30323a;">Khas Makanan Indonesia</h3>
                             <button class="primary-btn">Pesan Sekarang</button>
                         </div>
                     </div>
                     <!-- /banner -->
+
                     <!-- banner -->
                     <div class="banner banner-1">
                         <img src="{{ asset('frontend/banner/banner02.jpg') }}" alt="">
@@ -191,11 +213,12 @@ come *after* these tags -->
                         </div>
                     </div>
                     <!-- /banner -->
+
                     <!-- banner -->
                     <div class="banner banner-1">
                         <img src="{{ asset('frontend/banner/banner03.jpg') }}" alt="">
                         <div class="banner-caption">
-                            <h1 style="color: #f8694a;">Khas Makanan <span>Indonesia</span></h1>
+                            <h1 style="color: f8694a;">Khas Makanan <span>Indonesia</span></h1>
                             <button class="primary-btn">Pesan Sekarang</button>
                         </div>
                     </div>
@@ -207,8 +230,8 @@ come *after* these tags -->
         </div>
         <!-- /container -->
     </div>
-    <!-- /HOME -->
     @endif
+
     <!-- section -->
     <div class="section">
         <!-- container -->
@@ -238,6 +261,7 @@ come *after* these tags -->
                             </div>
                         </div>
                         <!-- /widget product -->
+
                         <!-- widget product -->
                         <div class="product product-widget">
                             <div class="product-thumb">
@@ -266,16 +290,23 @@ come *after* these tags -->
                             <li><a href="{{ route('produk.kategori', $row->id) }}">{{ $row->nama_kategori }}</a></li>
                             @endforeach
                         </ul>
+
                     </div>
                     <!-- /aside widget -->
                 </div>
                 <!-- /ASIDE -->
+
                 <!-- MAIN -->
                 <div id="main" class="col-md-9">
                     <!-- store top filter -->
                     <!-- /store top filter -->
+
+                    <!-- @yieldAwal -->
                     @yield('content')
+                    <!-- @yieldAkhir-->
+
                     <!-- store bottom filter -->
+
                     <!-- /store bottom filter -->
                 </div>
                 <!-- /MAIN -->
@@ -285,6 +316,7 @@ come *after* these tags -->
         <!-- /container -->
     </div>
     <!-- /section -->
+
     <!-- FOOTER -->
     <footer id="footer" class="section section-grey">
         <!-- container -->
@@ -301,7 +333,9 @@ come *after* these tags -->
                             </a>
                         </div>
                         <!-- /footer logo -->
+
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna</p>
+
                         <!-- footer social -->
                         <ul class="footer-social">
                             <li><a href="#"><i class="fa fa-facebook"></i></a></li>
@@ -314,6 +348,7 @@ come *after* these tags -->
                     </div>
                 </div>
                 <!-- /footer widget -->
+
                 <!-- footer widget -->
                 <div class="col-md-3 col-sm-6 col-xs-6">
                     <div class="footer">
@@ -328,20 +363,23 @@ come *after* these tags -->
                     </div>
                 </div>
                 <!-- /footer widget -->
+
                 <div class="clearfix visible-sm visible-xs"></div>
+
                 <!-- footer widget -->
                 <div class="col-md-3 col-sm-6 col-xs-6">
                     <div class="footer">
                         <h3 class="footer-header">Customer Service</h3>
                         <ul class="list-links">
                             <li><a href="#">About Us</a></li>
-                            <li><a href="#">Shipping & Return</a></li>
-                            <li><a href="#">Shipping Guide</a></li>
+                            <li><a href="#">Shiping & Return</a></li>
+                            <li><a href="#">Shiping Guide</a></li>
                             <li><a href="#">FAQ</a></li>
                         </ul>
                     </div>
                 </div>
                 <!-- /footer widget -->
+
                 <!-- footer subscribe -->
                 <div class="col-md-3 col-sm-6 col-xs-6">
                     <div class="footer">
@@ -351,7 +389,7 @@ come *after* these tags -->
                             <div class="form-group">
                                 <input class="input" placeholder="Enter Email Address">
                             </div>
-                            <button class="primary-btn">Join Newsletter</button>
+                            <button class="primary-btn">Join Newslatter</button>
                         </form>
                     </div>
                 </div>
@@ -378,6 +416,7 @@ come *after* these tags -->
         <!-- /container -->
     </footer>
     <!-- /FOOTER -->
+
     <!-- jQuery Plugins -->
     <script src="{{ asset('frontend/js/jquery.min.js') }}"></script>
     <script src="{{ asset('frontend/js/bootstrap.min.js') }}"></script>
@@ -385,14 +424,7 @@ come *after* these tags -->
     <script src="{{ asset('frontend/js/nouislider.min.js') }}"></script>
     <script src="{{ asset('frontend/js/jquery.zoom.min.js') }}"></script>
     <script src="{{ asset('frontend/js/main.js') }}"></script>
-    
-    <!-- Custom Scripts -->
-    <script>
-        // Fungsi untuk logout
-        function submitLogout() {
-            document.getElementById('keluar-form').submit();
-        }
-    </script>
+
 </body>
 
 </html>

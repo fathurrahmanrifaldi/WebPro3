@@ -23,7 +23,9 @@
         </select>
         <button type="submit">Cek Ongkir</button>
     </form>
+
     <div id="result"></div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             fetch('/provinces')
@@ -40,13 +42,13 @@
                             provinceSelect.appendChild(option);
                         });
                     } else {
-                        console.error('Failed to fetch provinces',
-                            data.rajaongkir.status.description);
+                        console.error('Failed to fetch provinces', data.rajaongkir.status.description);
                     }
                 })
                 .catch(error => {
                     console.error('Error fetching provinces:', error);
                 });
+
             document.getElementById('province').addEventListener('change', function() {
                 let provinceId = this.value;
                 fetch(`/cities?province_id=${provinceId}`)
@@ -64,56 +66,54 @@
                                 citySelect.appendChild(option);
                             });
                         } else {
-                            console.error('Failed to fetch cities',
-                                data.rajaongkir.status.description);
+                            console.error('Failed to fetch cities', data.rajaongkir.status.description);
                         }
                     })
                     .catch(error => {
                         console.error('Error fetching cities:', error);
                     });
             });
-            document.getElementById('ongkirForm').addEventListener('submit',
-                function(event) {
-                    event.preventDefault();
-                    let origin = 501; // Ganti Kode kota asal
-                    let destination = document.getElementById('city').value;
-                    let weight = document.getElementById('weight').value;
-                    let courier = document.getElementById('courier').value;
-                    fetch('/cost', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrftoken"]').getAttribute('content')
-                            },
-                            body: JSON.stringify({
-                                origin: origin,
-                                destination: destination,
-                                weight: weight,
-                                courier: courier
-                            })
+
+            document.getElementById('ongkirForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                let origin = 501; // Kode kota asal 
+                let destination = document.getElementById('city').value;
+                let weight = document.getElementById('weight').value;
+                let courier = document.getElementById('courier').value;
+
+                fetch('/cost', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({
+                            origin: origin,
+                            destination: destination,
+                            weight: weight,
+                            courier: courier
                         })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log('Cost data:', data);
-                            if (data.rajaongkir.status.code === 200) {
-                                let result = data.rajaongkir.results[0].costs;
-                                let resultDiv = document.getElementById('result');
-                                resultDiv.innerHTML = '';
-                                result.forEach(cost => {
-                                    let div = document.createElement('div');
-                                    div.textContent = `${cost.service} : ${cost.cost[0].value}
-Rupiah (${cost.cost[0].etd} hari)`;
-                                    resultDiv.appendChild(div);
-                                });
-                            } else {
-                                console.error('Failed to fetch cost',
-                                    data.rajaongkir.status.description);
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error fetching cost:', error);
-                        });
-                });
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Cost data:', data);
+                        if (data.rajaongkir.status.code === 200) {
+                            let result = data.rajaongkir.results[0].costs;
+                            let resultDiv = document.getElementById('result');
+                            resultDiv.innerHTML = '';
+                            result.forEach(cost => {
+                                let div = document.createElement('div');
+                                div.textContent = `${cost.service} : ${cost.cost[0].value} Rupiah (${cost.cost[0].etd} hari)`;
+                                resultDiv.appendChild(div);
+                            });
+                        } else {
+                            console.error('Failed to fetch cost', data.rajaongkir.status.description);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching cost:', error);
+                    });
+            });
         });
     </script>
 </body>
